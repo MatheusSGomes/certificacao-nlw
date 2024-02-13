@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.certificacao.certificacao_nlw.modules.questions.entities.QuestionEntity;
 import com.certificacao.certificacao_nlw.modules.questions.repositories.QuestionRepository;
 import com.certificacao.certificacao_nlw.modules.students.dto.StudentCertificationAnswerDTO;
+import com.certificacao.certificacao_nlw.modules.students.dto.VerifyHasCertificationDTO;
 import com.certificacao.certificacao_nlw.modules.students.entities.AnswersCertificationsEntity;
 import com.certificacao.certificacao_nlw.modules.students.entities.CertificationStudentEntity;
 import com.certificacao.certificacao_nlw.modules.students.entities.StudentEntity;
@@ -29,7 +30,17 @@ public class StudentCertificationAnswersUseCase {
     @Autowired
     private CertificationStudentRepository certificationStudentRepository;
 
-    public CertificationStudentEntity execute(StudentCertificationAnswerDTO dto) {
+    @Autowired
+    private VerifyIfHasCertificationUseCase verifyIfHasCertificationUseCase;
+
+    public CertificationStudentEntity execute(StudentCertificationAnswerDTO dto) throws Exception {
+
+        var hasCertification = verifyIfHasCertificationUseCase.execute(new VerifyHasCertificationDTO(dto.getEmail(), dto.getTechnology()));
+
+        if (hasCertification) {
+            throw new Exception("Você já tirou sua certificação");
+        }
+
         List<QuestionEntity> questionEntity = questionRepository.findByTechnology(dto.getTechnology());
         List<AnswersCertificationsEntity> answersCertifications = new ArrayList<>();
 
