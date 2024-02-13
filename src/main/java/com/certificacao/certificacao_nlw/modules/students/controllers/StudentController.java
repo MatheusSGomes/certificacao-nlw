@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.certificacao.certificacao_nlw.modules.students.dto.StudentCertificationAnswerDTO;
 import com.certificacao.certificacao_nlw.modules.students.dto.VerifyHasCertificationDTO;
+import com.certificacao.certificacao_nlw.modules.students.useCases.StudentCertificationAnswersUseCase;
 import com.certificacao.certificacao_nlw.modules.students.useCases.VerifyIfHasCertificationUseCase;
 
 @RestController
@@ -17,6 +19,9 @@ public class StudentController {
     @Autowired
     private VerifyIfHasCertificationUseCase verifyIfHasCertificationUseCase;
 
+    @Autowired
+    private StudentCertificationAnswersUseCase studentCertificationAnswersUseCase;
+
     @PostMapping("/verifyIfHasCertification")
     public String verifyIfHasCertification(@RequestBody VerifyHasCertificationDTO verifyHasCertificationDTO) {
         var result = this.verifyIfHasCertificationUseCase.execute(verifyHasCertificationDTO);
@@ -26,5 +31,10 @@ public class StudentController {
         }
 
         return "Usuário pode fazer a prova";
+    }
+
+    @PostMapping("/certification/answer")
+    public StudentCertificationAnswerDTO certificationAnswer(@RequestBody StudentCertificationAnswerDTO studentCertificationAnswerDTO) {
+        return this.studentCertificationAnswersUseCase.execute(studentCertificationAnswerDTO);
     }
 }
