@@ -79,7 +79,7 @@ public class StudentCertificationAnswersUseCase {
         CertificationStudentEntity certificationStudentEntity = CertificationStudentEntity.builder()
             .technology(dto.getTechnology())
             // .answersCertificationsEntities(answersCertifications)
-            .grate(correctAnswers.get())
+            .grade(correctAnswers.get())
             .studentID(studentID)
             .build();
 
